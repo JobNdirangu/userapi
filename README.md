@@ -62,7 +62,7 @@ userapi/
 
 ## ⚙️ Installation & Setup
 ## Clone the repo
-  git clone https://github.com/yourusername/userapi.git
+  git clone https://github.com/JobNdirangu/userapi.git
   cd userapi
 ## Install dependencies
   npm install
