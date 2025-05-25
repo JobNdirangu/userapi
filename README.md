@@ -93,5 +93,21 @@ API integration practice
 
 📄 License
 MIT — feel free to use and modify.
-
+## add user screenshot
 ![image](https://github.com/user-attachments/assets/7f6f58fc-7491-40d9-9890-26e81df0c83d)
+
+## get users screenshots
+![image](https://github.com/user-attachments/assets/ab55316b-609f-4133-bd59-53b53f966c7a)
+
+## update user
+update uses put request and must have id params and a body
+![image](https://github.com/user-attachments/assets/3d1beed3-7497-43ed-8dd1-5fa2942a7989)
+
+## get user
+requires a id param
+![image](https://github.com/user-attachments/assets/c292a312-9619-4af1-869f-c327f27f518e)
+
+## delete user
+![image](https://github.com/user-attachments/assets/bc6cf21d-a278-413a-84a2-d3ce1bbfb5f6)
+
+
