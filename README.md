@@ -66,7 +66,8 @@ userapi/
   cd userapi
 ## Install dependencies
   npm install
-  
+  npm install express dotenv cors bycript jsonwebtoken mongoose
+   
 ## Configure environment variables
 Create a .env file in the root directory:
   MONGO_URI=mongodb://127.0.0.1:27017/usersdb

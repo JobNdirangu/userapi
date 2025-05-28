@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
+const {User} = require('../models/model');
+const bcrypt = require('bcryptjs');
+const auth=require('../middleware/auth')
 
 // Add new user
 router.post('/', async (req, res) => {
@@ -15,7 +17,7 @@ router.post('/', async (req, res) => {
 
 
 // View all users
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
     try {
         const users = await User.find();
         res.json(users);
@@ -38,7 +40,12 @@ router.get('/:id', async (req, res) => {
 // Update user
 router.put('/:id', async (req, res) => {
     try {
-        const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const{name,email,age, password}=req.body
+        // hashing with salting
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, {name,email,age,password:hashedPassword}, { new: true });
         if (!updatedUser) return res.status(404).json({ message: 'User not found' });
         res.json(updatedUser);
     } catch (err) {
