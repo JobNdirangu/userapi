@@ -5,25 +5,20 @@ const { Employee, Department } = require('../models/model'); // Adjust path to y
 // Create a new employee
 router.post('/', async (req, res) => {
   try {
-    const { userId, firstName, lastName, email, departmentId, jobTitle, hireDate, salary, status } = req.body;
+    const { email, departmentId } = req.body;
     
     // Validate departmentId exists
     const department = await Department.findById(departmentId);
     if (!department) {
       return res.status(400).json({ error: 'Invalid departmentId' });
     }
+    // Check if email is already taken
+    const existingEmail = await Employee.findOne({ email });
+    if (existingEmail) {
+      return res.status(400).json({ error: 'Email is already taken' });
+    }
 
-    const employee = new Employee({
-      userId,
-      firstName,
-      lastName,
-      email,
-      departmentId,
-      jobTitle,
-      hireDate,
-      salary,
-      status,
-    });
+    const employee = new Employee(req.body);
     await employee.save();
     res.status(201).json(employee);
   } catch (error) {
@@ -35,7 +30,7 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const employees = await Employee.find()
-      .populate('userId', 'name email')
+      .populate('userId', 'name email photo')
       .populate('departmentId', 'name');
     res.json(employees);
   } catch (error) {
@@ -47,7 +42,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const employee = await Employee.findById(req.params.id)
-      .populate('userId', 'name email')
+      .populate('userId', 'name email ')
       .populate('departmentId', 'name');
     if (!employee) {
       return res.status(404).json({ error: 'Employee not found' });
