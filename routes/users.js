@@ -4,17 +4,6 @@ const {User} = require('../models/model');
 const bcrypt = require('bcryptjs');
 const auth=require('../middleware/auth')
 
-// Add new user
-router.post('/', async (req, res) => {
-    try {
-        const user = new User(req.body);
-        const savedUser = await user.save();
-        res.status(201).json(savedUser);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-});
-
 
 // View all users
 router.get('/', auth, async (req, res) => {
@@ -40,28 +29,55 @@ router.get('/:id', async (req, res) => {
 // Update user
 router.put('/:id', async (req, res) => {
     try {
-        const{name,email,age, password}=req.body
-        // hashing with salting
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        const { name, email, age, password } = req.body;
 
-        const updatedUser = await User.findByIdAndUpdate(req.params.id, {name,email,age,password:hashedPassword}, { new: true });
-        if (!updatedUser) return res.status(404).json({ message: 'User not found' });
+        // Step 1: Check if user exists
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Step 2: Prepare update data
+        let updateData = { name, email, age };
+
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+            updateData.password = hashedPassword;
+        }
+
+        // Step 3: Update the user
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            updateData,
+            { new: true }
+        );
+
         res.json(updatedUser);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 });
 
-// Delete user
+
+// DELETE a user by ID
 router.delete('/:id', async (req, res) => {
     try {
+        // Attempt to find and delete the user by their ID from the URL
         const deletedUser = await User.findByIdAndDelete(req.params.id);
-        if (!deletedUser) return res.status(404).json({ message: 'User not found' });
+
+        // If no user is found, send a 404 response
+        if (!deletedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // If deletion is successful, send a success message
         res.json({ message: 'User deleted' });
     } catch (err) {
+        // If an error occurs (e.g., invalid ID format), send a 500 error
         res.status(500).json({ message: err.message });
     }
 });
+
 
 module.exports = router;

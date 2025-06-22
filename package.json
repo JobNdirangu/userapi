@@ -1,7 +1,7 @@
 {
   "name": "userapi",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple Node.js REST API for managing users — built with **Express**, **MongoDB**, and **Mongoose**. This project is ideal for learning and teaching CRUD operations in a MERN environment.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,8 +17,9 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.15.0",
+    "mongoose": "^8.15.1",
     "multer": "^2.0.0",
     "nodemon": "^3.1.10"
-  }
+  },
+  "devDependencies": {}
 }

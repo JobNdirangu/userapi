@@ -4,10 +4,10 @@ const Schema=mongoose.Schema;
 const userSchema = new Schema({
     name: String,
     email: { type: String, required: true, unique: true },
-    age: Number,
+    dob: {type: Date, default: Date.now },
     password:{ type: String, required: true },
     photo: String
-});
+  });
 
 // Employees Schema
 const employeeSchema = new Schema({

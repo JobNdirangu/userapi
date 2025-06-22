@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 const {User} = require('../models/model')
 const bcrypt = require('bcryptjs');
+const path = require('path');
+const fs = require('fs');
 const jwt = require('jsonwebtoken');
+
 // for files
 const multer = require('multer');
 const JWT_SECRET = process.env.JWT_SECRET
@@ -22,9 +25,6 @@ router.post('/register', upload.single('photo'), async (req, res) => {
         // 1. Hash the password before saving
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-
-        const path = require('path');
-        const fs = require('fs');
 
         let photo = null;
 
